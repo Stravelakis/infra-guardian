@@ -1,0 +1,17 @@
+backup:
+  mode: every_change        # every_change | interval | first_plus_interval
+  interval: 5               # only used by interval / first_plus_interval
+  scope: changed_only       # changed_only | full
+  retention: session        # session | keep
+  prompt_cleanup: true      # ask before deleting a clean session's backups on next load
+
+notifications:
+  channel: telegram
+  telegram:
+    bot_token_env: GUARDIAN_TG_BOT_TOKEN   # read from env — never written into this file
+    chat_id_env: GUARDIAN_TG_CHAT_ID       # ditto
+
+features:
+  dry_run: true             # backup.py --dry-run: show what WOULD be backed up, touch nothing
+  doctor: true              # `doctor`: verify the skill's own install (scripts, config, timer)
+  auto_handoff: true        # append resolved issues into HANDOFF.md automatically
