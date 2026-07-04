@@ -15,3 +15,11 @@ features:
   dry_run: true             # backup.py --dry-run: show what WOULD be backed up, touch nothing
   doctor: true              # `doctor`: verify the skill's own install (scripts, config, timer)
   auto_handoff: true        # append resolved issues into HANDOFF.md automatically
+
+telegram:
+  enabled: false   # set true after adding token + chat ID to .env
+
+behaviour:
+  no_renagging: true      # once a proposal is snoozed/declined, don't re-raise
+                          # it until the underlying status actually changes
+  snooze_hours: 24        # minimum silence after a "C) snooze" choice
