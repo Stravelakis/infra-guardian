@@ -1,3 +1,10 @@
+# Secrets — real values only, never commit
+.env
+!.env.example
+guardian.config.yaml
+!guardian.config.EXAMPLE.yaml
+
+
 # Backups produced by backup.py — never commit these
 backups/
 *.session
@@ -14,3 +21,5 @@ env/
 # OS noise
 .DS_Store
 Thumbs.db
+
+
