@@ -36,3 +36,36 @@ than your own home/office, this is who you rent it from.
 ## New terms → glossary
 - snapshot, floating IP / elastic IP, rescue mode, cloud-init, metadata endpoint
   (append to `glossary.md` only if not already present — do NOT recreate glossary).
+
+# Hosting providers & control panels
+
+Three environments, three control panels. Same idea in each: a web GUI
+that manages the web server so you don't touch the command line.
+
+| Panel   | Provider       | Role in stack        |
+|---------|----------------|----------------------|
+| aaPanel | Self-hosted    | Our own server(s)    |
+| cPanel  | AsuraHosting   | Managed shared/VPS   |
+| hPanel  | Hostinger      | Managed hosting      |
+
+## aaPanel (self-hosted)
+Simple but powerful **open-source** web hosting control panel that manages
+the web server through a web-based GUI [[5]]. Free and a common
+open-source alternative to cPanel [[1]].
+- **Min specs:** 1 core CPU, 512 MB RAM (768 MB+ recommended), the pure
+  panel uses ~60 MB [[3]].
+- Use for: the servers we own and administer directly.
+
+## cPanel — AsuraHosting
+- Managed hosting; cPanel is the industry-standard commercial panel.
+- Use for: sites hosted on AsuraHosting.
+- Access: provider dashboard → cPanel login.
+
+## hPanel — Hostinger
+- Hostinger's own custom panel (not cPanel).
+- Use for: sites hosted on Hostinger.
+- Access: Hostinger account → hPanel.
+
+## Rule of thumb
+- **Self-managed / full control →** aaPanel.
+- **Managed convenience →** cPanel (AsuraHosting) or hPanel (Hostinger).
