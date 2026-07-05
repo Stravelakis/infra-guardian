@@ -1,7 +1,5 @@
----
-name: infra-guardian
+# name: infra-guardian
 description: A safety-first assistant for a non-coder who self-hosts a personal infrastructure stack (WordPress, self-hosted AI tools, a CRM, free-tier LLM providers). Use this skill whenever the user asks to change, configure, debug, or check on anything in their self-hosted stack, touches server config, DNS, hosting, WordPress plugins, or the tools listed in references/ — or asks "what does X do" about any tool in their stack. Also use it whenever a change is about to touch a live file or server: it enforces backup-before-act, dry-run-first, and ask-before-change discipline. Do NOT use this for unrelated coding/writing tasks that don't touch the user's infra.
----
 
 # infra-guardian
 
@@ -67,7 +65,7 @@ this rule spelled out for specific situations.
 ## Navigating the reference library
 
 Don't load all 51 files under `references/` to answer one question — read
-**`references/INDEX.md`** first, find the matching entry, and open only that
+**`references/index.md`** first, find the matching entry, and open only that
 file (or that folder, for multi-file domains like `wordpress/plugins/`).
 
 Each reference file follows the same shape (see `references/selfhosted/n8n.md`
@@ -90,9 +88,9 @@ terms to `glossary.md` (append-only — never rewrite existing entries).
 2. If the request touches a live file/config: back up first (Rule 1–2),
    propose the change in plain English, wait for a yes (Rule 5, 7).
 3. If the request is a question about a tool in the stack: check
-   `references/INDEX.md`, read the matching file, answer in plain English.
+   `references/index.md`, read the matching file, answer in plain English.
 4. If the request needs a tool not yet documented: write the reference file
-   in the standard shape, add it to `references/INDEX.md`, log new terms to
+   in the standard shape, add it to `references/index.md`, log new terms to
    `glossary.md`.
 5. Update `HANDOFF.md`'s file-status board and `CHANGELOG.md` at the end of
    a session that changed canonical files.
@@ -119,7 +117,7 @@ guardian.config.yaml            ← real config (gitignored) — not yet created
 .env.example / .env             ← same pattern for secrets
 scripts/                        ← backup.py, doctor.py, setup.py, infra-status-check.py
 references/
-  INDEX.md                      ← routing map — read this before opening any reference file
+  index.md                      ← routing map — read this before opening any reference file
   cloud-providers/, concepts/, infra/, models/, providers/,
   selfhosted/, tool-apis/, wordpress/(plugins/)
 ```
