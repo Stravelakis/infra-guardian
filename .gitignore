@@ -1,30 +1,12 @@
-# Secrets — real values only, never commit
+# secrets — never commit
 .env
-!.env.example
 guardian.config.yaml
+
+# keep the examples
+!.env.example
 !guardian.config.EXAMPLE.yaml
 
-
-# Backups produced by backup.py — never commit these
-backups/
-*.session
-
-# Local, possibly secret-bearing config written by setup.py
-guardian.config.yaml
-
-# Python
+# python / os cruft
 __pycache__/
-*.py[cod]
-.venv/
-env/
-
-# OS noise
+*.pyc
 .DS_Store
-Thumbs.db
-
-<<<<<<< HEAD
-.env
-!.env.example
-=======
-
->>>>>>> 7b9b74f (Add reference library, scripts, HANDOFF, and config example)

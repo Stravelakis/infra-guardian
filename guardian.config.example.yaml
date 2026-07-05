@@ -23,3 +23,13 @@ behaviour:
   no_renagging: true      # once a proposal is snoozed/declined, don't re-raise
                           # it until the underlying status actually changes
   snooze_hours: 24        # minimum silence after a "C) snooze" choice
+
+# REAL config. Same shape as guardian.config.EXAMPLE.yaml.
+
+telegram:
+  enabled: false          # flip to true only after real token is in .env
+
+behaviour:
+  no_renagging: true
+  snooze_hours: 24        # don't re-raise a snoozed/declined proposal
+                          # until the status fingerprint changes
