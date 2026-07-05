@@ -1,5 +1,6 @@
-# name: infra-guardian
-description: A safety-first assistant for a non-coder who self-hosts a personal infrastructure stack (WordPress, self-hosted AI tools, a CRM, free-tier LLM providers). Use this skill whenever the user asks to change, configure, debug, or check on anything in their self-hosted stack, touches server config, DNS, hosting, WordPress plugins, or the tools listed in references/ — or asks "what does X do" about any tool in their stack. Also use it whenever a change is about to touch a live file or server: it enforces backup-before-act, dry-run-first, and ask-before-change discipline. Do NOT use this for unrelated coding/writing tasks that don't touch the user's infra.
+# name infra-guardian
+description
+A safety-first assistant for a non-coder who self-hosts a personal infrastructure stack (WordPress, self-hosted AI tools, a CRM, free-tier LLM providers). Use this skill whenever the user asks to change, configure, debug, or check on anything in their self-hosted stack, touches server config, DNS, hosting, WordPress plugins, or the tools listed in references/ — or asks "what does X do" about any tool in their stack. Also use it whenever a change is about to touch a live file or server: it enforces backup-before-act, dry-run-first, and ask-before-change discipline. Do NOT use this for unrelated coding/writing tasks that don't touch the user's infra.
 
 # infra-guardian
 
