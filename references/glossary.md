@@ -34,3 +34,4 @@ gets one plain-English line here, so the vocabulary compounds.
 | CDN | A network of servers worldwide that delivers your site faster. |
 | SSL / TLS | The tech behind the padlock — encrypts traffic so it's private (https). |
 | snapshot | A saved copy of something's exact state at one moment, for restoring later. |
+| rotate (a key) | Replacing a key/token with a new one and disabling the old one, so a leaked or old key stops working. |
