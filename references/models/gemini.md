@@ -24,3 +24,8 @@ Chat, long-context, multimodal backend option.
 
 ## New terms → glossary
 - OpenAI-compatible shim
+
+## See also
+This is the free AI Studio key path. For Gemini accessed through Google
+Cloud/Vertex (billing, quotas, IAM controls), see
+`cloud-providers/gemini-vertex.md` instead.
