@@ -1,0 +1,82 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import VernacularPanels from '../components/VernacularPanels.astro';
+import FeatureCards from '../components/FeatureCards.astro';
+import Playground from '../components/Playground.astro';
+import ReviewStamp from '../components/ReviewStamp.astro';
+import Glossary from '../components/Glossary.astro';
+import { siteConfig } from '../../site.config.ts';
+
+import { Content as Dev, frontmatter as devFm } from '../docs/dev.md';
+import { Content as Plain, frontmatter as plainFm } from '../docs/plain.md';
+import { Content as Eli5, frontmatter as eli5Fm } from '../docs/eli5.md';
+
+// One source: GUIDE.md / INSTALL.md copied in by scripts/sync-docs.mjs.
+const features = [
+  {
+    "icon": "👀",
+    "title": "Watches",
+    "text": "Checks that your services are alive and healthy."
+  },
+  {
+    "icon": "🗣️",
+    "title": "Explains in plain English",
+    "text": "No jargon. A new word gets a one-line entry in a glossary."
+  },
+  {
+    "icon": "💾",
+    "title": "Backs up first",
+    "text": "Saves a copy and checks it matches before anything is touched."
+  },
+  {
+    "icon": "🙋",
+    "title": "Asks first",
+    "text": "Proposes one change, waits for your yes. Say no once and it will not keep asking."
+  },
+  {
+    "icon": "📚",
+    "title": "Keeps notes on your stack",
+    "text": "A reference library of plain-English notes on providers, AI models, self-hosted apps and WordPress plugins."
+  },
+  {
+    "icon": "🔑",
+    "title": "Keys stay local",
+    "text": "Secrets live only in a hidden .env file that is never uploaded."
+  }
+];
+
+const sources = import.meta.glob<{ Content: any }>('../docs/source/*.md', { eager: true });
+const guide = sources['../docs/source/guide.md'];
+const install = sources['../docs/source/install.md'];
+---
+<DocsLayout title="Overview" home>
+  <section class="hero reveal" id="top">
+    <span class="eyebrow">Docs</span>
+    <h1 class="hero-title">{siteConfig.projectName}</h1>
+    <p class="hero-sub">{siteConfig.description}</p>
+  </section>
+
+  <FeatureCards features={features} title="What infra-guardian does" />
+
+  <section class="doc-body reveal" id="docs" aria-label="Documentation" data-glossary>
+    <VernacularPanels>
+      <Fragment slot="dev"><ReviewStamp {...devFm} /><Dev /></Fragment>
+      <Fragment slot="plain"><ReviewStamp {...plainFm} /><Plain /></Fragment>
+      <Fragment slot="eli5"><ReviewStamp {...eli5Fm} /><Eli5 /></Fragment>
+    </VernacularPanels>
+  </section>
+
+  {install && (
+    <section class="doc-body doc-source reveal" id="install" aria-label="Install" data-glossary>
+      <install.Content />
+    </section>
+  )}
+  {guide && (
+    <section class="doc-body doc-source reveal" id="guide" aria-label="Guide" data-glossary>
+      <guide.Content />
+    </section>
+  )}
+
+  {siteConfig.playground.enabled && <Playground />}
+  <Glossary />
+</DocsLayout>

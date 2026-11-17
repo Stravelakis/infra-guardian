@@ -1,0 +1,39 @@
+[
+  {
+    "term": "Self-hosting",
+    "explainer": true,
+    "eli5": "Keeping your apps on a computer you control, instead of renting a spot inside someone else's.",
+    "english": "Running your own website or tools on a server you control, rather than using a company's hosted version.",
+    "dev": "Operating services on infrastructure you administer yourself (VPS, home server) rather than SaaS."
+  },
+  {
+    "term": "Backup",
+    "eli5": "A photo of how things were, so you can put them back.",
+    "english": "A saved copy you can restore if a change goes wrong. Here it is checked against the original before it counts.",
+    "dev": "Snapshot of a file with a verified SHA-256 checksum; restore snapshots the live file first."
+  },
+  {
+    "term": "Checksum",
+    "eli5": "A fingerprint for a file. If two files have the same fingerprint, they are the same.",
+    "english": "A short code calculated from a file's contents. If the copy's code matches the original's, the copy is perfect.",
+    "dev": "SHA-256 digest used to verify backup integrity."
+  },
+  {
+    "term": "Dry run",
+    "eli5": "Practising without really doing it.",
+    "english": "Showing what would happen without changing anything.",
+    "dev": "A mode (--dry-run) that prints planned actions and performs none."
+  },
+  {
+    "term": "Environment file (.env)",
+    "eli5": "A secret drawer for passwords. It never goes in the shop window.",
+    "english": "A hidden file where private keys are kept. It is never uploaded to GitHub.",
+    "dev": "Dotenv file holding runtime secrets; gitignored, with .env.example as the committed template."
+  },
+  {
+    "term": "Claude Skill",
+    "eli5": "A set of instructions that teaches Claude how to do one job carefully.",
+    "english": "A packaged set of instructions and files that Claude follows for a specific kind of task.",
+    "dev": "A SKILL.md plus supporting files that an agent loads on demand."
+  }
+]
