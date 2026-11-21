@@ -28,8 +28,8 @@ cd infra-guardian
 
 ## What it needs
 
-- Python 3.
-- PyYAML, only for `scripts/infra-status-check.py` (`pip install pyyaml`).
+- Python 3 (3.8 or newer).
+- PyYAML, for `scripts/backup.py` and `scripts/infra-status-check.py` (`pip install pyyaml`).
 
 ## Keys
 

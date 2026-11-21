@@ -2,6 +2,7 @@
 import DocsLayout from '../layouts/DocsLayout.astro';
 import VernacularPanels from '../components/VernacularPanels.astro';
 import FeatureCards from '../components/FeatureCards.astro';
+import LevelPicker from '../components/LevelPicker.astro';
 import Playground from '../components/Playground.astro';
 import ReviewStamp from '../components/ReviewStamp.astro';
 import Glossary from '../components/Glossary.astro';
@@ -12,51 +13,95 @@ import { Content as Plain, frontmatter as plainFm } from '../docs/plain.md';
 import { Content as Eli5, frontmatter as eli5Fm } from '../docs/eli5.md';
 
 // One source: GUIDE.md / INSTALL.md copied in by scripts/sync-docs.mjs.
-const features = [
-  {
-    "icon": "👀",
-    "title": "Watches",
-    "text": "Checks that your services are alive and healthy."
-  },
-  {
-    "icon": "🗣️",
-    "title": "Explains in plain English",
-    "text": "No jargon. A new word gets a one-line entry in a glossary."
-  },
-  {
-    "icon": "💾",
-    "title": "Backs up first",
-    "text": "Saves a copy and checks it matches before anything is touched."
-  },
-  {
-    "icon": "🙋",
-    "title": "Asks first",
-    "text": "Proposes one change, waits for your yes. Say no once and it will not keep asking."
-  },
-  {
-    "icon": "📚",
-    "title": "Keeps notes on your stack",
-    "text": "A reference library of plain-English notes on providers, AI models, self-hosted apps and WordPress plugins."
-  },
-  {
-    "icon": "🔑",
-    "title": "Keys stay local",
-    "text": "Secrets live only in a hidden .env file that is never uploaded."
-  }
-];
-
 const sources = import.meta.glob<{ Content: any }>('../docs/source/*.md', { eager: true });
 const guide = sources['../docs/source/guide.md'];
 const install = sources['../docs/source/install.md'];
+
+// This repo has no package.json of its own; the latest release is v0.3 (CHANGELOG.md).
+const version = '0.3';
+
+const features = [
+  { icon: '💾', title: 'Backs up first', text: 'Before any change it saves a copy of the file and proves the copy is identical (a SHA-256 fingerprint). No proof, no success message.' },
+  { icon: '🙋', title: 'Asks first, one thing at a time', text: 'It proposes one change in plain words and waits for your yes. Say no or snooze, and it does not keep asking.' },
+  { icon: '↩️', title: 'Undo that is also undoable', text: 'Restoring a backup first saves the current file, so even the undo can be undone.' },
+  { icon: '🗣️', title: 'No jargon without a translation', text: 'New technical words get a one-line entry in a glossary, so the vocabulary grows with you.' },
+  { icon: '📚', title: 'Notes on your whole stack', text: 'Plain-English notes for hosting, DNS, AI providers, self-hosted apps and WordPress plugins, found through one index.' },
+  { icon: '🩺', title: 'Checks its own health', text: 'A doctor script reports pass, warn or fix for its config, scripts and backup folder. A separate self-check can message you on Telegram, if you set that up.' },
+];
 ---
 <DocsLayout title="Overview" home>
-  <section class="hero reveal" id="top">
-    <span class="eyebrow">Docs</span>
+  <section class="frame hero reveal" id="top">
+    <span class="label">Docs{version ? ` · v${version}` : ''}</span>
     <h1 class="hero-title">{siteConfig.projectName}</h1>
     <p class="hero-sub">{siteConfig.description}</p>
+    <div class="btns">
+      {siteConfig.heroLinks.map((l) => (
+        <a class:list={['btn', { primary: l.primary }]} href={l.href}>{l.label}</a>
+      ))}
+    </div>
+    <div class="pills">
+      {siteConfig.heroPills.map((t) => (
+        <span class="pill"><i></i>{t}</span>
+      ))}
+    </div>
   </section>
 
-  <FeatureCards features={features} title="What infra-guardian does" />
+  <LevelPicker />
+
+  <FeatureCards features={features} title="What it does" />
+
+  <section class="showcase run" id="showcase" aria-labelledby="showcase-title">
+    <h2 class="section-title reveal" id="showcase-title">A real run</h2>
+    <p class="run-intro reveal">
+      The guardian is instructions plus four small Python scripts, so there is no window to screenshot.
+      This is a real session captured on 21 Nov 2026 from the released scripts, with a throwaway
+      file called <code>nginx.conf</code>. Folder paths are shortened and the health check header and some checks are trimmed. The commands are shown as <code>python3</code>; this run was on Windows, where the same scripts ran as <code>python</code>.
+    </p>
+    <ol class="run-steps">
+      <li class="reveal">
+        <h3>1. Preview first (dry run)</h3>
+        <p>Nothing is saved. It only says what it would do.</p>
+        <pre><code>$ python3 scripts/backup.py --file live/nginx.conf --reason "change port" --dry-run
+Using settings from: ~/guardian/guardian.config.yaml
+[DRY RUN] Would BACK UP live/nginx.conf
+  In plain English: policy: every change</code></pre>
+      </li>
+      <li class="reveal">
+        <h3>2. Back up, and prove the copy is identical</h3>
+        <p>The line "A verified safe copy" only appears after the two fingerprints matched.</p>
+        <pre><code>$ python3 scripts/backup.py --file live/nginx.conf --reason "change port"
+Started a new backup session: 20261121T193654Z
+Backed up  ->  vault-backups/20261121T193654Z/nginx.conf.20261121T193654Z.c7c31945
+  In plain English: A verified safe copy of 'nginx.conf' now exists. Reason: change port. Restore it any time with:  backup.py --restore c7c31945</code></pre>
+      </li>
+      <li class="reveal">
+        <h3>3. See what is saved</h3>
+        <pre><code>$ python3 scripts/backup.py --list
+ID         WHEN (UTC)             FILE                         REASON
+--------------------------------------------------------------------------------
+c7c31945   2026-11-21T19:36:54Z   nginx.conf                   change port
+  In plain English: Use the ID in the first column with --restore &lt;id&gt;.</code></pre>
+      </li>
+      <li class="reveal">
+        <h3>4. The change goes wrong, so undo it</h3>
+        <p>We changed <code>listen 80</code> to <code>listen 8080</code>, then restored. The undo saved the broken version first.</p>
+        <pre><code>$ python3 scripts/backup.py --restore-last
+Saved the current version first (in case you want it back): live/nginx.conf.pre-restore.20261121T193654Z
+Restored  live/nginx.conf  from backup c7c31945.
+  In plain English: 'nginx.conf' is now exactly as it was at 2026-11-21T19:36:54Z.</code></pre>
+      </li>
+      <li class="reveal">
+        <h3>5. Check the guardian's own health</h3>
+        <p>PASS is good, WARN is optional, FIX needs action. Here the timer and Telegram are not set up, which is fine.</p>
+        <pre><code>$ python3 scripts/doctor.py
+[PASS] Config file — found and readable
+[PASS] Script backup.py — present and executable
+[PASS] Backups folder — exists and is writable
+[WARN] Self-check timer — systemctl not found (fine off-Ubuntu)
+[WARN] Telegram (optional) — not set up — self-checks print/save instead</code></pre>
+      </li>
+    </ol>
+  </section>
 
   <section class="doc-body reveal" id="docs" aria-label="Documentation" data-glossary>
     <VernacularPanels>
@@ -66,13 +111,14 @@ const install = sources['../docs/source/install.md'];
     </VernacularPanels>
   </section>
 
+  {/* The ids install/guide come from the Markdown H1s themselves; a second id on the section made duplicates (found on infra-guardian, 21 Nov 2026). No "reveal" on Install and Guide: it waits for part of a section to be on screen, which a long section never reaches (found on Video Forge, 18 Nov 2026). */}
   {install && (
-    <section class="doc-body doc-source reveal" id="install" aria-label="Install" data-glossary>
+    <section class="doc-body doc-source" aria-label="Install" data-glossary>
       <install.Content />
     </section>
   )}
   {guide && (
-    <section class="doc-body doc-source reveal" id="guide" aria-label="Guide" data-glossary>
+    <section class="doc-body doc-source" aria-label="Guide" data-glossary>
       <guide.Content />
     </section>
   )}
@@ -80,3 +126,12 @@ const install = sources['../docs/source/install.md'];
   {siteConfig.playground.enabled && <Playground />}
   <Glossary />
 </DocsLayout>
+
+<style is:global>
+  .run-intro { max-width: 60ch; color: var(--dim); }
+  .run-steps { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .run-steps li { min-width: 0; }
+  .run-steps li h3 { margin: 0 0 0.25rem; }
+  .run-steps li p { margin: 0 0 0.5rem; }
+  .run-steps pre { overflow-x: auto; }
+</style>

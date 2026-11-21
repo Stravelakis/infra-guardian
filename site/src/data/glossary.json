@@ -1,39 +1,151 @@
 [
   {
-    "term": "Self-hosting",
+    "term": "server",
     "explainer": true,
-    "eli5": "Keeping your apps on a computer you control, instead of renting a spot inside someone else's.",
-    "english": "Running your own website or tools on a server you control, rather than using a company's hosted version.",
-    "dev": "Operating services on infrastructure you administer yourself (VPS, home server) rather than SaaS."
+    "eli5": "A computer that is always on and always connected, so other people can visit the website or app that lives on it. It is often a rented computer you never see.",
+    "english": "A computer that runs your website or apps around the clock. Usually rented from a hosting company, sometimes a small box at home.",
+    "dev": "A machine (VPS, dedicated host, home server) running your services. infra-guardian never connects to it by itself; it only guides the changes Claude makes."
   },
   {
-    "term": "Backup",
-    "eli5": "A photo of how things were, so you can put them back.",
-    "english": "A saved copy you can restore if a change goes wrong. Here it is checked against the original before it counts.",
-    "dev": "Snapshot of a file with a verified SHA-256 checksum; restore snapshots the live file first."
+    "term": "self-hosting",
+    "explainer": true,
+    "eli5": "Running your own website or apps on a computer you control, instead of using a company's ready-made version.",
+    "english": "Running tools such as WordPress or a CRM yourself, on a server you control, instead of paying a company to run them for you.",
+    "dev": "Operating services on infrastructure you administer yourself (VPS, home server) instead of consuming SaaS."
   },
   {
-    "term": "Checksum",
-    "eli5": "A fingerprint for a file. If two files have the same fingerprint, they are the same.",
-    "english": "A short code calculated from a file's contents. If the copy's code matches the original's, the copy is perfect.",
-    "dev": "SHA-256 digest used to verify backup integrity."
+    "term": "skill",
+    "explainer": true,
+    "eli5": "A folder of instructions that Claude reads, so it behaves in a certain careful way for a certain kind of job. Like a recipe card Claude keeps in its pocket.",
+    "english": "A packaged set of instructions (and sometimes small scripts) that Claude loads when your request matches it. This one makes Claude careful around your servers.",
+    "dev": "A SKILL.md with a name and a description that decides when it triggers, plus supporting files. Here SKILL.md holds ten rules, and scripts/ holds four Python helpers."
   },
   {
-    "term": "Dry run",
-    "eli5": "Practising without really doing it.",
-    "english": "Showing what would happen without changing anything.",
-    "dev": "A mode (--dry-run) that prints planned actions and performs none."
+    "term": "backup",
+    "explainer": true,
+    "eli5": "A spare copy of a file, made before you change it, so you can put it back the way it was.",
+    "english": "A saved copy of a file taken before a change. In this tool it only counts once it has been checked against the original.",
+    "dev": "A copy made by scripts/backup.py with shutil.copy2, kept only after its SHA-256 matches the source, and recorded in state.json."
   },
   {
-    "term": "Environment file (.env)",
-    "eli5": "A secret drawer for passwords. It never goes in the shop window.",
-    "english": "A hidden file where private keys are kept. It is never uploaded to GitHub.",
-    "dev": "Dotenv file holding runtime secrets; gitignored, with .env.example as the committed template."
+    "term": "restore",
+    "eli5": "Putting the saved copy back where the changed file is, so things go back to how they were.",
+    "english": "Putting a backup back in place of the current file. The current file is saved first, so a restore can itself be undone.",
+    "dev": "backup.py --restore ID or --restore-last. It re-verifies the stored copy, writes NAME.pre-restore.STAMP beside the live file, copies, then verifies again."
   },
   {
-    "term": "Claude Skill",
-    "eli5": "A set of instructions that teaches Claude how to do one job carefully.",
-    "english": "A packaged set of instructions and files that Claude follows for a specific kind of task.",
-    "dev": "A SKILL.md plus supporting files that an agent loads on demand."
+    "term": "checksum",
+    "eli5": "A fingerprint for a file. If two files have the same fingerprint, they are exactly the same.",
+    "english": "A short code worked out from a file's contents. If the copy and the original give the same code, the copy is perfect.",
+    "dev": "SHA-256 hex digest computed in 64 KiB chunks and compared between source and copy."
+  },
+  {
+    "term": "SHA-256",
+    "eli5": "The name of one particular fingerprint recipe for files.",
+    "english": "The method this tool uses to make a file's checksum. Change one letter in the file and the code changes completely.",
+    "dev": "hashlib.sha256 over the file bytes."
+  },
+  {
+    "term": "dry run",
+    "eli5": "Practising without really doing it. It tells you what would happen and changes nothing.",
+    "english": "A preview that shows what would happen without changing anything.",
+    "dev": "The --dry-run flag on backup.py. It prints BACK UP or SKIP and the reason, and returns before any backup, session or state is written."
+  },
+  {
+    "term": ".env",
+    "explainer": true,
+    "eli5": "A hidden file where secret passwords for other services are kept, so they are not written in the open.",
+    "english": "A hidden file in the project folder that holds secret keys. It is listed in .gitignore, so it is never uploaded.",
+    "dev": "Plain KEY=value lines. infra-status-check.py reads it with its own minimal parser (TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID). Gitignored."
+  },
+  {
+    "term": "API key",
+    "eli5": "A long secret code that proves to another service that you are allowed to use it, like a library card.",
+    "english": "A password-like code from another service that lets a tool use that service on your behalf. Keep it private.",
+    "dev": "Provider credentials listed as placeholders in .env.example (Mistral, NVIDIA, Groq, Cerebras, OpenRouter, Gemini). No script in the repo reads them."
+  },
+  {
+    "term": "YAML",
+    "eli5": "A way of writing settings as a plain list in a text file.",
+    "english": "A plain text format for settings files. Indentation matters, so the spaces at the start of a line are part of the meaning.",
+    "dev": "Parsed with PyYAML safe_load. Duplicate top-level keys are accepted and the last one wins, which is what guardian.config.example.yaml relies on by accident."
+  },
+  {
+    "term": "config",
+    "eli5": "The settings file. It tells the helper how you like things done.",
+    "english": "The settings file, guardian.config.yaml. Made from the example file, and never uploaded.",
+    "dev": "guardian.config.yaml, looked up by backup.py as --config, then the current folder, then ~/.infra-guardian/. doctor.py and setup.py use the repo root only."
+  },
+  {
+    "term": "mirror",
+    "eli5": "A second copy of your backup kept somewhere else, in case the first place breaks.",
+    "english": "An optional second place that gets a copy of each backup, ideally on a different disk.",
+    "dev": "Optional backup.mirror path in the config. The copy is verified by SHA-256 too; a failed mirror only warns, it does not fail the backup."
+  },
+  {
+    "term": "clone",
+    "eli5": "Making your own copy of a project from the internet onto your computer.",
+    "english": "Downloading a project's whole folder from GitHub with git, so you have it on your own computer.",
+    "dev": "git clone https://github.com/Stravelakis/infra-guardian.git. The v0.3 release has no attached download, so cloning is the install."
+  },
+  {
+    "term": "terminal",
+    "eli5": "A window where you type a command and press Enter, instead of clicking.",
+    "english": "The text window where you type commands. On Windows it is PowerShell or Command Prompt; on Mac it is the Terminal app.",
+    "dev": "Any shell. The docs show python3; on Windows the same scripts run with python."
+  },
+  {
+    "term": "Python",
+    "eli5": "A programming language. You do not need to learn it, only to have it installed so the little helper scripts can run.",
+    "english": "The language the four helper scripts are written in. You need it installed, but you never have to write any.",
+    "dev": "Python 3. The code calls Path.unlink(missing_ok=True), so 3.8 or newer in practice."
+  },
+  {
+    "term": "PyYAML",
+    "eli5": "A small add-on that lets Python read settings files.",
+    "english": "A small add-on for Python that reads the settings file. Install it with pip install pyyaml.",
+    "dev": "Imported at the top of backup.py and infra-status-check.py. Without it both exit with a plain message (backup.py exits 2)."
+  },
+  {
+    "term": "Telegram",
+    "eli5": "A chat app. The helper can send you a short message there, if you set it up.",
+    "english": "A chat app. The optional self-check can send you its A/B/C suggestions through a Telegram bot you create.",
+    "dev": "infra-status-check.py posts to the Bot API sendMessage endpoint with urllib, only if telegram.enabled is true and both .env values are set."
+  },
+  {
+    "term": "timer",
+    "eli5": "An alarm clock for a computer. It starts a job at set times.",
+    "english": "A schedule that runs the self-check by itself. On Linux that is a systemd user timer you set up yourself.",
+    "dev": "doctor.py looks for systemctl --user is-enabled infra-status-check.timer. No unit file ships in the repo."
+  },
+  {
+    "term": "drift",
+    "eli5": "When things have slowly changed so they no longer match what you wrote down.",
+    "english": "When the real setup no longer matches your notes about it.",
+    "dev": "In infra-status-check.py, only a text check on status.md (open items, missing \"Verified?\" column). It does not probe any server."
+  },
+  {
+    "term": "sysadmin",
+    "eli5": "A grown-up job: the person who looks after servers so they keep working.",
+    "english": "A system administrator, someone whose job is running servers. This tool is for people who are not one.",
+    "dev": "The skill's target user is the opposite: a non-coder who self-hosts."
+  },
+  {
+    "term": "DNS",
+    "eli5": "The internet's phone book. It turns a name like example.com into the address of a computer.",
+    "english": "The system that turns a domain name into a server address. One of the things the reference library explains.",
+    "dev": "Covered by references/providers/dns.md. A change here is one of the \"touches DNS\" triggers in the skill description."
+  },
+  {
+    "term": "CRM",
+    "eli5": "A tool that remembers the people and companies you deal with.",
+    "english": "Customer relationship manager: software that keeps track of your contacts. The library has a note on Twenty CRM.",
+    "dev": "references/selfhosted/twenty-crm.md."
+  },
+  {
+    "term": "WordPress",
+    "eli5": "A popular tool for building websites without writing code.",
+    "english": "A very popular website builder. The library has notes on WordPress itself, its database, hosting and eight plugins.",
+    "dev": "references/wordpress/ (wordpress.md, database.md, _hosting.md, plugins.md) and references/wordpress/plugins/ (eight plugin notes)."
   }
 ]

@@ -1,6 +1,4 @@
-import type { DotFieldOptions } from './src/scripts/dot-field';
-
-// Per-repo config. Most projects only touch this file and src/docs/*.md.
+// Per-repo config for the shared docs-theme (repo standards §7).
 
 interface SocialLink {
   kind: 'github' | 'linkedin';
@@ -25,11 +23,27 @@ export const siteConfig = {
   socialImageAlt: "infra-guardian: back up, preview, ask, change one thing, write it down.",
   locale: 'en_GB',
 
-  // Sidebar menu. Each id must match an element id on the page.
+  // Left menu, top group. The "On this page" group below it is built from the
+  // headings of the reading level on screen.
   nav: [
     { id: 'top', label: 'Overview' },
-    { id: 'features', label: 'Features' },
-    { id: 'docs', label: 'Docs' },
+    { id: 'features', label: 'What it does' },
+    { id: 'showcase', label: 'A real run' },
+  ],
+
+  // Buttons and chips in the hero.
+  heroLinks: [
+    { label: 'Get it on GitHub', href: 'https://github.com/Stravelakis/infra-guardian', primary: true },
+    { label: 'Latest release', href: 'https://github.com/Stravelakis/infra-guardian/releases/latest' },
+    { label: 'What changed', href: 'https://github.com/Stravelakis/infra-guardian/blob/HEAD/CHANGELOG.md' },
+  ],
+  heroPills: ['Backs up first', 'Asks before it acts', 'One change at a time', 'No keys needed to start'],
+
+  // The three cards under the hero. They switch the reading level.
+  levelCards: [
+    { id: 'dev', tag: 'Dev', title: 'How it is built', text: 'The skill file, the four scripts, the config, the reference library, and what is enforced by code versus by instruction.' },
+    { id: 'plain', tag: 'English', title: 'How to use it', text: 'For people comfortable with tech who do not write code. What it does, install, a typical session, the safety promises, fixes.' },
+    { id: 'eli5', tag: 'ELI5', title: 'Start from zero', text: 'Slow and complete. What a server is, what a skill is, what a backup is, then every step with what you should see.' },
   ],
 
   // Reading-level switch at the top of the sidebar. The ids are fixed (they
@@ -46,8 +60,10 @@ export const siteConfig = {
     { id: 'eli5', label: 'ELI5' },
   ],
 
+  // infra-guardian is Python scripts plus instructions for Claude; a browser
+  // sandbox cannot run it honestly. The front page shows a real captured run
+  // instead (never a fake "run" button, STANDARDS §7).
   playground: {
-    // true only for JS/web projects, where running the code in the browser is real.
     enabled: false,
     starterCode: `// try it\nconsole.log("hello from the playground")`,
   },
@@ -60,30 +76,4 @@ export const siteConfig = {
     ] as SocialLink[],
   },
 
-  // React Bits "Dot Field" settings, same names as on reactbits.dev.
-  backgrounds: {
-    page: {
-      cursorRadius: 200,
-      bulgeStrength: 6,
-      cursorForce: 0,
-      dotRadius: 2,
-      dotSpacing: 5,
-      glowRadius: 50,
-      sparkle: true,
-      gradientFrom: '#0001c6',
-      gradientTo: '#00cade',
-      glowColor: '#040410',
-    },
-    sidebar: {
-      cursorRadius: 100,
-      bulgeStrength: 0,
-      cursorForce: 0,
-      bulgeOnly: false,
-      dotSpacing: 5,
-      glowRadius: 50,
-      gradientFrom: '#0001c6',
-      gradientTo: '#00cade',
-      glowColor: '#040410',
-    },
-  } satisfies Record<string, DotFieldOptions>,
 };

@@ -107,3 +107,23 @@ Once you say which, it's a small, mechanical fix.
   done by the time this was written). If something here looks off against
   what actually happened, trust the repo over this file and say so — that's
   exactly the kind of drift this document exists to catch.
+
+## 9. Docs site, three reading levels (2026-11-21)
+
+**What changed (docs only, nothing in the skill):** `site/` moved to the v2 docs theme; `site/src/docs/dev.md`, `plain.md`, `eli5.md` and `site/glossary.yml` rewritten from the repo's real files; front page rebuilt (feature cards, an annotated real run of `backup.py` and `doctor.py`, level cards). Pages are stamped `checkedAgainst: v0.3`, `checkedOn: 2026-11-21`. Two doc-source fixes: `INSTALL.md` (PyYAML is needed by `backup.py` too, Python 3.8+) and `GUIDE.md` (doctor creates a `backups/` folder).
+
+**Not documented (unreleased):** nothing on `main` beyond v0.3 is described except where marked; the five skill commits after the tag only touch `SKILL.md`, `CHANGELOG.md`, `HANDOFF.md` and one glossary line.
+
+**Problems found in the skill itself (NOT fixed, need a decision):**
+1. `SKILL.md` on `main` lost its `---` front matter (commit `1760803`, reformatted again in `0f61d48`); the v0.3 tag has it. The tag instead says `references/INDEX.md` while the file is `index.md` (fails on Linux).
+2. `setup.py` writes `paths.backup_dir` / `paths.mirror_dir` / `notifications.telegram_*`; `backup.py` reads `backup.root` / `backup.mirror`. The wizard's folder answer is ignored; a Telegram token typed there is stored in plain text and never used.
+3. Telegram variable names disagree: the example config says `GUARDIAN_TG_BOT_TOKEN` / `GUARDIAN_TG_CHAT_ID`; the scripts and `.env.example` use `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`. `doctor.py` reports a placeholder token as "configured".
+4. No script reads `retention`, `prompt_cleanup`, `scope: full`, `features.*`, `no_renagging` or `snooze_hours`. Nothing deletes old backups. The "don't nag" rule is instruction only.
+5. `doctor.py` creates and writes in `<repo>/backups/` (it claims to change nothing) and checks a different folder than `backup.py` uses (`~/.infra-guardian/backups`).
+6. `infra-status-check.py` does not contact any server despite "watches your services" wording in `readme.md`/`GUIDE.md`; it only reads `status.md` (absent from the repo). Its `OPEN` check matches any word containing "open". It writes `self-check.log` in the repo root (not gitignored). It uses `datetime.utcnow()` (DeprecationWarning on 3.12). No systemd timer unit ships, though `doctor.py` looks for one.
+7. `readme.md` still names `basic.py`, `guardian.config.EXAMPLE.yaml` and a root `glossary.md`, and calls `SKILL.md` v0.2; `.gitignore` has `!guardian.config.EXAMPLE.yaml` (wrong case).
+8. `--restore-last` restores the newest backup of any file; the `.pre-restore.` copy is not recorded in `state.json`.
+9. Scripts are committed `100644`, so `doctor.py` warns "not executable" on Linux/macOS.
+10. Where Claude should load the skill from is not documented anywhere in the repo.
+
+**Claims not confirmed:** whether a skill loader accepts the current `main` `SKILL.md` header; whether the scripts are ever invoked by Claude in practice (only the instructions say so); contents of the real (gitignored) `guardian.config.yaml` and `.env` (already §7).
