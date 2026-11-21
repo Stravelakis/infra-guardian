@@ -41,7 +41,7 @@ Add `--dry-run` to see what would be backed up without touching anything. `--res
 python3 scripts/doctor.py
 ```
 
-It prints a plain pass or fix report for the config, the scripts, the backup folder, the timer and optional Telegram alerts. It changes nothing.
+It prints a plain pass or fix report for the config, the scripts, the backup folder, the timer and optional Telegram alerts. It changes nothing of yours, apart from creating a `backups` folder in the project if there is none.
 
 ## The reference library
 
